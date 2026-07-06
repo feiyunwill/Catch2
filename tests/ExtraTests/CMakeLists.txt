@@ -526,6 +526,19 @@ set_tests_properties(TestSpecs::SkippingAllTestsFails
     WILL_FAIL ON
 )
 
+add_executable(FastCompileMacros ${TESTS_DIR}/X07-FastCompileMacros.cpp)
+target_link_libraries(FastCompileMacros PRIVATE Catch2_buildall_interface)
+target_compile_definitions(FastCompileMacros PRIVATE CATCH_CONFIG_FAST_COMPILE)
+
+add_test(
+  NAME CompileConfiguration::FastCompile
+  COMMAND $<TARGET_FILE:FastCompileMacros>
+)
+set_tests_properties(CompileConfiguration::FastCompile
+  PROPERTIES
+    PASS_REGULAR_EXPRESSION "test cases:  6 \\| 1 passed \\| 1 failed \\| 4 failed as expected\nassertions: 13 \\| 6 passed \\| 2 failed \\| 5 failed as expected"
+)
+
 # This sets up a one-off executable that compiles against the amalgamated
 # files, and then runs it for a super simple check that the amalgamated
 # files are usable.
@@ -595,6 +608,7 @@ set(EXTRA_TEST_BINARIES
   NoTests
   ListenersGetEventsBeforeReporters
   MixingClearedAndUnclearedMessages
+  FastCompileMacros
   InfiniteGenerators
   ThreadSafetyTests
 #  DebugBreakMacros
