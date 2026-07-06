@@ -526,30 +526,6 @@ set_tests_properties(TestSpecs::SkippingAllTestsFails
     WILL_FAIL ON
 )
 
-set(EXTRA_TEST_BINARIES
-  AllSkipped
-  PrefixedMacros
-  DisabledMacros
-  DisabledExceptions-DefaultHandler
-  DisabledExceptions-CustomHandler
-  FallbackStringifier
-  DisableStringification
-  PartialTestCaseEvents
-  DuplicatedTestCases-SameNameAndTags
-  DuplicatedTestCases-SameNameDifferentTags
-  DuplicatedTestCases-DuplicatedTestCaseMethods
-  NoTests
-  ListenersGetEventsBeforeReporters
-  MixingClearedAndUnclearedMessages
-#  DebugBreakMacros
-)
-
-# Notice that we are modifying EXTRA_TEST_BINARIES destructively, do not
-# use it after this point!
-list(FILTER EXTRA_TEST_BINARIES EXCLUDE REGEX "DisabledExceptions.*")
-list(APPEND CATCH_TEST_TARGETS ${EXTRA_TEST_BINARIES})
-set(CATCH_TEST_TARGETS ${CATCH_TEST_TARGETS} PARENT_SCOPE)
-
 # This sets up a one-off executable that compiles against the amalgamated
 # files, and then runs it for a super simple check that the amalgamated
 # files are usable.
@@ -603,3 +579,29 @@ set_tests_properties(Warnings::InfiniteGenerators
     PASS_REGULAR_EXPRESSION "test cases: 2 \\| 1 passed \\| 1 failed"
     TIMEOUT 5
 )
+
+set(EXTRA_TEST_BINARIES
+  AllSkipped
+  PrefixedMacros
+  DisabledMacros
+  DisabledExceptions-DefaultHandler
+  DisabledExceptions-CustomHandler
+  FallbackStringifier
+  DisableStringification
+  PartialTestCaseEvents
+  DuplicatedTestCases-SameNameAndTags
+  DuplicatedTestCases-SameNameDifferentTags
+  DuplicatedTestCases-DuplicatedTestCaseMethods
+  NoTests
+  ListenersGetEventsBeforeReporters
+  MixingClearedAndUnclearedMessages
+  InfiniteGenerators
+  ThreadSafetyTests
+#  DebugBreakMacros
+)
+
+# Notice that we are modifying EXTRA_TEST_BINARIES destructively, do not
+# use it after this point!
+list(FILTER EXTRA_TEST_BINARIES EXCLUDE REGEX "DisabledExceptions.*")
+list(APPEND CATCH_TEST_TARGETS ${EXTRA_TEST_BINARIES})
+set(CATCH_TEST_TARGETS ${CATCH_TEST_TARGETS} PARENT_SCOPE)
