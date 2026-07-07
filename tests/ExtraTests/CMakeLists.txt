@@ -583,15 +583,55 @@ add_executable(InfiniteGenerators ${TESTS_DIR}/X95-InfiniteGenerators.cpp)
 target_link_libraries(InfiniteGenerators PRIVATE Catch2::Catch2WithMain)
 
 add_test(
-  NAME Warnings::InfiniteGenerators
+  NAME Warnings::InfiniteGenerators::NoFilterWarns
   COMMAND $<TARGET_FILE:InfiniteGenerators> --warn InfiniteGenerators
 )
-set_tests_properties(Warnings::InfiniteGenerators
+set_tests_properties(Warnings::InfiniteGenerators::NoFilterWarns
   PROPERTIES
     # One test case fails with infinite generator, but the other one runs
     PASS_REGULAR_EXPRESSION "test cases: 2 \\| 1 passed \\| 1 failed"
     TIMEOUT 5
 )
+
+add_test(
+  NAME Warnings::InfiniteGenerators::MatchAllFilterWarns
+  COMMAND $<TARGET_FILE:InfiniteGenerators>
+    --warn InfiniteGenerators
+    --path-filter g:*
+)
+set_tests_properties(Warnings::InfiniteGenerators::MatchAllFilterWarns
+  PROPERTIES
+    # One test case fails with infinite generator, but the other one runs
+    PASS_REGULAR_EXPRESSION "test cases: 2 \\| 1 passed \\| 1 failed"
+    TIMEOUT 5
+)
+
+add_test(
+  NAME Warnings::InfiniteGenerators::MatchOneFilterDoesntWarn
+  COMMAND $<TARGET_FILE:InfiniteGenerators>
+    --warn InfiniteGenerators
+    --path-filter g:1
+)
+set_tests_properties(Warnings::InfiniteGenerators::MatchOneFilterDoesntWarn
+  PROPERTIES
+    # One test case fails with infinite generator, but the other one runs
+    PASS_REGULAR_EXPRESSION "All tests passed \\(1 assertion in 2 test cases\\)"
+    TIMEOUT 5
+)
+
+add_test(
+  NAME Warnings::InfiniteGenerators::SectionFilterWarns
+  COMMAND $<TARGET_FILE:InfiniteGenerators>
+    --warn InfiniteGenerators
+    --section FooBarBaz
+)
+set_tests_properties(Warnings::InfiniteGenerators::SectionFilterWarns
+  PROPERTIES
+    # One test case fails with infinite generator, but the other one runs
+    PASS_REGULAR_EXPRESSION "test cases: 2 \\| 1 passed \\| 1 failed"
+    TIMEOUT 5
+)
+
 
 set(EXTRA_TEST_BINARIES
   AllSkipped
